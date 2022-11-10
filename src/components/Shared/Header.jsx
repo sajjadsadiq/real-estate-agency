@@ -27,7 +27,7 @@ const Header = () => {
             <li
               onClick={() => navigate("/")}
               className={`cursor-pointer py-7 font-semibold text-gray-500 border-b-4 border-b-transparent ${
-                pathMathRoute("/") && "text-black border-b-red-500"
+                pathMathRoute("/") && "text-black border-b-green-700"
               }`}
             >
               Home
@@ -35,7 +35,7 @@ const Header = () => {
             <li
               onClick={() => navigate("/offers")}
               className={`cursor-pointer py-7 font-semibold text-gray-500 border-b-4 border-b-transparent ${
-                pathMathRoute("/offers") && "text-black border-b-red-500"
+                pathMathRoute("/offers") && "text-black border-b-green-700"
               }`}
             >
               Offers
@@ -43,7 +43,7 @@ const Header = () => {
             <li
               onClick={() => navigate("/singin")}
               className={`cursor-pointer py-7 font-semibold text-gray-500 border-b-4 border-b-transparent ${
-                pathMathRoute("/singin") && "text-black border-b-red-500"
+                pathMathRoute("/singin") && "text-black border-b-green-700"
               }`}
             >
               Sing In
