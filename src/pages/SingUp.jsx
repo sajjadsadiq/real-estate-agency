@@ -2,8 +2,16 @@ import React, { useState } from "react";
 import SingUpImg from "./../assets/singup.svg";
 import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
 import { RiSendPlaneFill } from "react-icons/ri";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import OAuth from "../components/Shared/OAuth";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
+import db from "../firebaseConfig";
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
+import { toast } from "react-toastify";
 
 const SingUp = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -13,6 +21,7 @@ const SingUp = () => {
     password: "",
   });
   const { name, email, password } = formData;
+  const navigate = useNavigate();
 
   const handleChange = (event) => {
     setFormData((prev) => ({
@@ -20,6 +29,48 @@ const SingUp = () => {
       [event.target.name]: event.target.value,
     }));
   };
+
+  // async function handleFormSubmit(event) {
+  //   event.preventDefault();
+  //   const userCredential = await createUserWithEmailAndPassword(
+  //     auth,
+  //     email,
+  //     password
+  //   )
+  //     .try((userCredential) => {
+  //       const user = userCredential.user;
+  //       console.log(user);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // }
+
+  async function handleFormSubmit(event) {
+    event.preventDefault();
+
+    try {
+      const auth = getAuth();
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      updateProfile(auth.currentUser, {
+        displayName: name,
+      });
+      const user = userCredential.user;
+      const formDataCopy = { ...formData };
+      delete formDataCopy.password;
+      formDataCopy.timestamp = serverTimestamp();
+
+      await setDoc(doc(db, "users", user.uid), formDataCopy);
+      toast.success("Sing Up was Successful!");
+      navigate("/");
+    } catch (error) {
+      toast.error("something went wrong registation!");
+    }
+  }
 
   return (
     <div>
@@ -30,7 +81,7 @@ const SingUp = () => {
             <img src={SingUpImg} alt="sing Up" />
           </div>
           <div className="w-full lg:w-[40%] md:w-[70%] px-10 lg:ml-20 mt-10">
-            <form>
+            <form onSubmit={handleFormSubmit}>
               <div className="my-4">
                 <label htmlFor="email" className="text-xl">
                   Full Name
