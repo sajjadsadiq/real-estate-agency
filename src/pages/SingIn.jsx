@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 const SingIn = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
@@ -23,20 +23,23 @@ const SingIn = () => {
     }));
   };
 
-  async function handleSingInForm (event){
-    event.preventDefault()
+  async function handleSingInForm(event) {
+    event.preventDefault();
     try {
       const auth = getAuth();
-      const userCredential = await signInWithEmailAndPassword (auth, email, password)
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       const user = userCredential.user;
-      if(userCredential.user){
-        navigate('/')
+      if (userCredential.user) {
+        navigate("/");
       }
-      toast.success("Successfull Login")
+      toast.success("Successfull Login");
       console.log(user);
-      
     } catch (error) {
-      toast.error('Bad user credentials')
+      toast.error("Bad user credentials");
     }
   }
   return (

@@ -3,6 +3,8 @@ import ForgotedPassword from "./../assets/forgot-password.svg";
 import { RiSendPlaneFill } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import OAuth from "../components/Shared/OAuth";
+import { toast } from "react-toastify";
+import { getAuth, sendPasswordResetEmail } from "firebase/auth";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -10,16 +12,29 @@ const ForgotPassword = () => {
   const handleChange = (event) => {
     setEmail(event.target.value);
   };
+
+  async function handleForgotedPassword(event) {
+    event.preventDefault();
+    try {
+      const auth = getAuth();
+      await sendPasswordResetEmail(auth, email);
+      toast.success("Email was send");
+    } catch (error) {
+      toast.error("Cloud not send reset password!");
+    }
+  }
   return (
     <div>
       <div>
-        <h1 className="text-center font-bold text-3xl mt-16">Forgot Password</h1>
+        <h1 className="text-center font-bold text-3xl mt-16">
+          Forgot Password
+        </h1>
         <div className="flex flex-wrap justify-center items-center max-w-6xl mx-auto py-8">
           <div className="w-full lg:w-[50%] md:w-[70%] px-10">
             <img src={ForgotedPassword} alt="Forgoted Password" />
           </div>
           <div className="w-full lg:w-[40%] md:w-[70%] px-10 lg:ml-20 mt-10">
-            <form>
+            <form onSubmit={handleForgotedPassword}>
               <div className="mb-4">
                 <label htmlFor="email" className="text-xl">
                   Email
