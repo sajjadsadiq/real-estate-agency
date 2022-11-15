@@ -2,10 +2,13 @@ import React, { useState } from "react";
 import SingInImg from "./../assets/singup.svg";
 import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
 import { RiSendPlaneFill } from "react-icons/ri";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import OAuth from "../components/Shared/OAuth";
+import { toast } from "react-toastify";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 const SingIn = () => {
+  const navigate = useNavigate()
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
@@ -19,6 +22,23 @@ const SingIn = () => {
       [event.target.name]: event.target.value,
     }));
   };
+
+  async function handleSingInForm (event){
+    event.preventDefault()
+    try {
+      const auth = getAuth();
+      const userCredential = await signInWithEmailAndPassword (auth, email, password)
+      const user = userCredential.user;
+      if(userCredential.user){
+        navigate('/')
+      }
+      toast.success("Successfull Login")
+      console.log(user);
+      
+    } catch (error) {
+      toast.error('Bad user credentials')
+    }
+  }
   return (
     <div>
       <h1 className="text-center font-bold text-3xl mt-16">Sing In</h1>
@@ -27,7 +47,7 @@ const SingIn = () => {
           <img src={SingInImg} alt="singIn" />
         </div>
         <div className="w-full lg:w-[40%] md:w-[70%] px-10 lg:ml-20 mt-10">
-          <form>
+          <form onSubmit={handleSingInForm}>
             <div>
               <label htmlFor="email" className="text-xl">
                 Email
