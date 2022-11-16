@@ -1,11 +1,26 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import { useLocation, useNavigate } from "react-router-dom";
 
 const Header = () => {
+  // Daynamic Header Item Name Change
+  const [pageState, setPageState] = useState("Sing In")
+  const auth = getAuth()
+  useEffect(()=> {
+    onAuthStateChanged(auth, (user) => {
+      if(user){
+        setPageState("Profile")
+      } else{
+        setPageState("Sing In")
+      }
+    })
+  }, [])
+  // 
+
   const location = useLocation();
   const navigate = useNavigate();
 
-  const pathMathRoute = (route) => {
+  const pathMatchRoute = (route) => {
     if (route === location.pathname) {
       return true;
     }
@@ -27,7 +42,7 @@ const Header = () => {
             <li
               onClick={() => navigate("/")}
               className={`cursor-pointer py-7 font-semibold text-gray-500 border-b-4 border-b-transparent ${
-                pathMathRoute("/") && "text-black border-b-green-700"
+                pathMatchRoute("/") && "text-black border-b-green-700"
               }`}
             >
               Home
@@ -35,18 +50,18 @@ const Header = () => {
             <li
               onClick={() => navigate("/offers")}
               className={`cursor-pointer py-7 font-semibold text-gray-500 border-b-4 border-b-transparent ${
-                pathMathRoute("/offers") && "text-black border-b-green-700"
+                pathMatchRoute("/offers") && "text-black border-b-green-700"
               }`}
             >
               Offers
             </li>
             <li
-              onClick={() => navigate("/singin")}
+              onClick={() => navigate("/profile")}
               className={`cursor-pointer py-7 font-semibold text-gray-500 border-b-4 border-b-transparent ${
-                pathMathRoute("/singin") && "text-black border-b-green-700"
+                (pathMatchRoute("/singin") || pathMatchRoute("/profile")) && "text-black border-b-green-700"
               }`}
             >
-              Sing In
+              {pageState}
             </li>
           </ul>
         </div>
