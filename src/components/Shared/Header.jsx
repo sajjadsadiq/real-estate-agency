@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { getAuth, onAuthStateChanged } from 'firebase/auth'
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const Header = () => {
   // Daynamic Header Item Name Change
-  const [pageState, setPageState] = useState("Sing In")
-  const auth = getAuth()
-  useEffect(()=> {
+  const [pageState, setPageState] = useState("Sing In");
+  const auth = getAuth();
+  useEffect(() => {
     onAuthStateChanged(auth, (user) => {
-      if(user){
-        setPageState("Profile")
-      } else{
-        setPageState("Sing In")
+      if (user) {
+        setPageState("Profile");
+      } else {
+        setPageState("Sing In");
       }
-    })
-  }, [])
-  // 
+    });
+  }, []);
+  //
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -27,7 +27,7 @@ const Header = () => {
   };
 
   return (
-    <div className="border-b shadow-sm bg-white sticky top-0">
+    <div className="border-b shadow-sm bg-white sticky top-0 z-40">
       <header className="flex items-center justify-between max-w-6xl mx-auto px-10">
         <div>
           <img
@@ -58,7 +58,8 @@ const Header = () => {
             <li
               onClick={() => navigate("/profile")}
               className={`cursor-pointer py-7 font-semibold text-gray-500 border-b-4 border-b-transparent ${
-                (pathMatchRoute("/singin") || pathMatchRoute("/profile")) && "text-black border-b-green-700"
+                (pathMatchRoute("/singin") || pathMatchRoute("/profile")) &&
+                "text-black border-b-green-700"
               }`}
             >
               {pageState}
