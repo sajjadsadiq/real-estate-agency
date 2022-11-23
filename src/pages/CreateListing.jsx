@@ -1,283 +1,299 @@
 import React, { useState } from "react";
 
 const CreateListing = () => {
-  const [fromData, setFromData] = useState({
+  const [formData, setFormData] = useState({
     type: "rent",
     name: "",
-    bedroome: 1,
-    bathroome: 1,
+    bedrooms: 1,
+    bathrooms: 1,
     parking: false,
     furnished: false,
     address: "",
     description: "",
-    offes: false,
+    offer: false,
     regularPrice: 0,
     discountedPrice: 0,
+    latitude: 0,
+    longitude: 0,
+    images: {},
   });
-
-  // Destructuring fromData
   const {
     type,
     name,
-    bedroome,
-    bathroome,
+    bedrooms,
+    bathrooms,
     parking,
-    furnished,
     address,
+    furnished,
     description,
-    offes,
+    offer,
     regularPrice,
     discountedPrice,
-  } = fromData;
+    latitude,
+    longitude,
+    images,
+  } = formData;
 
-  const handleOnClick = () => {};
-  const handleOnChange = () => {};
+  function onChange(e) {
+    let boolean = null;
+    if (e.target.value === "true") {
+      boolean = true;
+    }
+    if (e.target.value === "false") {
+      boolean = false;
+    }
+    // Files
+    if (e.target.files) {
+      setFormData((prevState) => ({
+        ...prevState,
+        images: e.target.files,
+      }));
+    }
+    // Text/Boolean/Number
+    if (!e.target.files) {
+      setFormData((prevState) => ({
+        ...prevState,
+        [e.target.id]: boolean ?? e.target.value,
+      }));
+    }
+  }
 
   return (
     <div className="max-w-md mx-auto px-4">
       <h1 className="text-3xl font-bold text-center my-6">Create a Listing</h1>
 
       <form>
-        <div className="sale_rent">
-          <p className="text-lg font-semibold">Sell / Rent</p>
-          <div className="flex gap-6 mt-2">
-            <button
-              type="button"
-              name="sale"
-              id="sale"
-              value={type}
-              onClick={handleOnClick}
-              className={`font-medium text-sm uppercase shadow-md rounded hover:shadow-lg transition duration-150 ease-in-out w-full px-7 py-3 ${
-                type === "rent"
-                  ? "bg-white text-black"
-                  : "bg-green-700 text-white"
-              }`}
-            >
-              Sale
-            </button>
-            <button
-              type="button"
-              name="rent"
-              id="rent"
-              value={type}
-              onClick={handleOnClick}
-              className={`font-medium text-sm uppercase shadow-md rounded hover:shadow-lg transition duration-150 ease-in-out w-full px-7 py-3 ${
-                type === "sale"
-                  ? "bg-white text-black"
-                  : "bg-green-700 text-white"
-              }`}
-            >
-              Rent
-            </button>
+        <p className="text-lg mt-6 font-semibold">Sell / Rent</p>
+        <div className="flex">
+          <button
+            type="button"
+            id="type"
+            value="sale"
+            onClick={onChange}
+            className={`mr-3 px-7 py-3 font-medium text-sm uppercase shadow-md rounded hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out w-full ${
+              type === "rent"
+                ? "bg-white text-black"
+                : "bg-green-700 text-white"
+            }`}
+          >
+            sell
+          </button>
+          <button
+            type="button"
+            id="type"
+            value="rent"
+            onClick={onChange}
+            className={`ml-3 px-7 py-3 font-medium text-sm uppercase shadow-md rounded hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out w-full ${
+              type === "sale"
+                ? "bg-white text-black"
+                : "bg-green-700 text-white"
+            }`}
+          >
+            rent
+          </button>
+        </div>
+        <p className="text-lg mt-6 font-semibold">Name</p>
+        <input
+          type="text"
+          id="name"
+          value={name}
+          onChange={onChange}
+          placeholder="Name"
+          maxLength="32"
+          minLength="10"
+          required
+          className="w-full px-4 py-2 text-xl text-gray-700 bg-white border border-gray-300 rounded transition duration-150 ease-in-out focus:text-gray-700 focus:bg-white focus:border-green-700 mb-6"
+        />
+        <div className="flex space-x-6 mb-6">
+          <div>
+            <p className="text-lg font-semibold">Beds</p>
+            <input
+              type="number"
+              id="bedrooms"
+              value={bedrooms}
+              onChange={onChange}
+              min="1"
+              max="50"
+              required
+              className="w-full px-4 py-2 text-xl text-gray-700 bg-white border border-gray-300 rounded transition duration-150 ease-in-out focus:text-gray-700 focus:bg-white focus:border-green-700 text-center"
+            />
+          </div>
+          <div>
+            <p className="text-lg font-semibold">Baths</p>
+            <input
+              type="number"
+              id="bathrooms"
+              value={bathrooms}
+              onChange={onChange}
+              min="1"
+              max="50"
+              required
+              className="w-full px-4 py-2 text-xl text-gray-700 bg-white border border-gray-300 rounded transition duration-150 ease-in-out focus:text-gray-700 focus:bg-white focus:border-green-700 text-center"
+            />
           </div>
         </div>
-
-        <div className="name">
-          <p className="text-lg font-semibold mt-6 mb-2">Name</p>
-          <input
-            onChange={handleOnChange}
-            type="text"
-            name="name"
-            id="name"
-            placeholder="Name"
-            value={name}
-            className="w-full px-4 py-3 text-xl text-gray-700 border border-gray-300 rounded focus:border-slate-600 "
-          />
+        <p className="text-lg mt-6 font-semibold">Parking spot</p>
+        <div className="flex">
+          <button
+            type="button"
+            id="parking"
+            value={true}
+            onClick={onChange}
+            className={`mr-3 px-7 py-3 font-medium text-sm uppercase shadow-md rounded hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out w-full ${
+              !parking ? "bg-white text-black" : "bg-green-700 text-white"
+            }`}
+          >
+            Yes
+          </button>
+          <button
+            type="button"
+            id="parking"
+            value={false}
+            onClick={onChange}
+            className={`ml-3 px-7 py-3 font-medium text-sm uppercase shadow-md rounded hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out w-full ${
+              parking ? "bg-white text-black" : "bg-green-700 text-white"
+            }`}
+          >
+            no
+          </button>
         </div>
+        <p className="text-lg mt-6 font-semibold">Furnished</p>
+        <div className="flex">
+          <button
+            type="button"
+            id="furnished"
+            value={true}
+            onClick={onChange}
+            className={`mr-3 px-7 py-3 font-medium text-sm uppercase shadow-md rounded hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out w-full ${
+              !furnished ? "bg-white text-black" : "bg-green-700 text-white"
+            }`}
+          >
+            yes
+          </button>
+          <button
+            type="button"
+            id="furnished"
+            value={false}
+            onClick={onChange}
+            className={`ml-3 px-7 py-3 font-medium text-sm uppercase shadow-md rounded hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out w-full ${
+              furnished ? "bg-white text-black" : "bg-green-700 text-white"
+            }`}
+          >
+            no
+          </button>
+        </div>
+        <p className="text-lg mt-6 font-semibold">Address</p>
+        <textarea
+          type="text"
+          id="address"
+          value={address}
+          onChange={onChange}
+          placeholder="Address"
+          required
+          className="w-full px-4 py-2 text-xl text-gray-700 bg-white border border-gray-300 rounded transition duration-150 ease-in-out focus:text-gray-700 focus:bg-white focus:border-green-700 mb-6"
+        />
 
-        <div className="beds_baths flex gap-6">
+        <p className="text-lg font-semibold">Description</p>
+        <textarea
+          type="text"
+          id="description"
+          value={description}
+          onChange={onChange}
+          placeholder="Description"
+          required
+          className="w-full px-4 py-2 text-xl text-gray-700 bg-white border border-gray-300 rounded transition duration-150 ease-in-out focus:text-gray-700 focus:bg-white focus:border-green-700 mb-6"
+        />
+        <p className="text-lg font-semibold">Offer</p>
+        <div className="flex mb-6">
+          <button
+            type="button"
+            id="offer"
+            value={true}
+            onClick={onChange}
+            className={`mr-3 px-7 py-3 font-medium text-sm uppercase shadow-md rounded hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out w-full ${
+              !offer ? "bg-white text-black" : "bg-green-700 text-white"
+            }`}
+          >
+            yes
+          </button>
+          <button
+            type="button"
+            id="offer"
+            value={false}
+            onClick={onChange}
+            className={`ml-3 px-7 py-3 font-medium text-sm uppercase shadow-md rounded hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out w-full ${
+              offer ? "bg-white text-black" : "bg-green-700 text-white"
+            }`}
+          >
+            no
+          </button>
+        </div>
+        <div className="flex items-center mb-6">
           <div className="">
-            <p className="text-lg font-semibold mt-6 mb-2">Beds</p>
-            <input
-              type="number"
-              id="beds"
-              name="beds"
-              onChange={handleOnChange}
-              value={bedroome}
-              className="w-full px-4 py-3 text-xl text-gray-700 border border-gray-300 rounded focus:border-slate-600 text-center"
-            />
-          </div>
-          <div className="">
-            <p className="text-lg font-semibold mt-6 mb-2">Baths</p>
-            <input
-              type="number"
-              id="baths"
-              name="baths"
-              onChange={handleOnChange}
-              value={bathroome}
-              className="w-full px-4 py-3 text-xl text-gray-700 border border-gray-300 rounded focus:border-slate-600 text-center"
-            />
-          </div>
-        </div>
-
-        <div className="parking_spot">
-          <p className="text-lg font-semibold mt-6 mb-2">Parking Spot</p>
-          <div className="flex gap-6">
-            <button
-              type="button"
-              name="parking"
-              id="parking"
-              value={true}
-              onClick={handleOnClick}
-              className={`font-medium text-sm uppercase shadow-md rounded hover:shadow-lg transition duration-150 ease-in-out w-full px-7 py-3 ${
-                !parking ? "bg-white text-black" : "bg-green-700 text-white"
-              }`}
-            >
-              Yes
-            </button>
-            <button
-              type="button"
-              name="parking"
-              id="parking"
-              value={false}
-              onClick={handleOnClick}
-              className={`font-medium text-sm uppercase shadow-md rounded hover:shadow-lg transition duration-150 ease-in-out w-full px-7 py-3 ${
-                parking ? "bg-white text-black" : "bg-green-700 text-white"
-              }`}
-            >
-              No
-            </button>
-          </div>
-        </div>
-
-        <div className="furnished">
-          <p className="text-lg font-semibold mt-6 mb-2">Furnished</p>
-          <div className="flex gap-6">
-            <button
-              type="button"
-              name="furnished"
-              id="furnished"
-              value={true}
-              onClick={handleOnClick}
-              className={`font-medium text-sm uppercase shadow-md rounded hover:shadow-lg transition duration-150 ease-in-out w-full px-7 py-3 ${
-                !furnished ? "bg-white text-black" : "bg-green-700 text-white"
-              }`}
-            >
-              Yes
-            </button>
-            <button
-              type="button"
-              name="furnished"
-              id="furnished"
-              value={false}
-              onClick={handleOnClick}
-              className={`font-medium text-sm uppercase shadow-md rounded hover:shadow-lg transition duration-150 ease-in-out w-full px-7 py-3 ${
-                furnished ? "bg-white text-black" : "bg-green-700 text-white"
-              }`}
-            >
-              No
-            </button>
-          </div>
-        </div>
-
-        <div className="adress">
-          <p className="text-lg font-semibold mt-6 mb-2">Adress</p>
-          <textarea
-            onChange={handleOnChange}
-            type="text"
-            name="address"
-            id="address"
-            placeholder="Address"
-            value={address}
-            className="w-full px-4 py-3 text-xl text-gray-700 border border-gray-300 rounded focus:border-slate-600 "
-          />
-        </div>
-
-        <div className="description">
-          <p className="text-lg font-semibold mt-6 mb-2">Description</p>
-          <textarea
-            onChange={handleOnChange}
-            type="text"
-            name="description"
-            id="description"
-            placeholder="Description"
-            value={description}
-            className="w-full px-4 py-3 text-xl text-gray-700 border border-gray-300 rounded focus:border-slate-600 "
-          />
-        </div>
-
-        <div className="offes">
-          <p className="text-lg font-semibold mt-6 mb-2">Offes</p>
-          <div className="flex gap-6">
-            <button
-              type="button"
-              name="offes"
-              id="offes"
-              value={true}
-              onClick={handleOnClick}
-              className={`font-medium text-sm uppercase shadow-md rounded hover:shadow-lg transition duration-150 ease-in-out w-full px-7 py-3 ${
-                !offes ? "bg-white text-black" : "bg-green-700 text-white"
-              }`}
-            >
-              Yes
-            </button>
-            <button
-              type="button"
-              name="offes"
-              id="offes"
-              value={false}
-              onClick={handleOnClick}
-              className={`font-medium text-sm uppercase shadow-md rounded hover:shadow-lg transition duration-150 ease-in-out w-full px-7 py-3 ${
-                offes ? "bg-white text-black" : "bg-green-700 text-white"
-              }`}
-            >
-              No
-            </button>
-          </div>
-        </div>
-
-        <div className="regularPrice">
-          <p className="text-lg font-semibold mt-6 mb-2">Regular Price</p>
-          <div className="flex gap-6 items-center">
-            <input
-              type="number"
-              id="regular_Price"
-              name="regular_Price"
-              onChange={handleOnChange}
-              value={regularPrice}
-              className="w-1/2 px-4 py-3 text-xl text-gray-700 border border-gray-300 rounded focus:border-slate-600 text-center"
-            />
-            <div>{type === "rent" && <div>$ / Month</div>}</div>
-          </div>
-        </div>
-
-        <div className="discountedPrice">
-          {offes && (
-            <div>
-              <p className="text-lg font-semibold mt-6 mb-2">
-                Discounted Price
-              </p>
+            <p className="text-lg font-semibold">Regular price</p>
+            <div className="flex w-full justify-center items-center space-x-6">
               <input
                 type="number"
-                id="discounted_price"
-                name="discounted_price"
-                onChange={handleOnChange}
-                value={discountedPrice}
-                className="w-1/2 px-4 py-3 text-xl text-gray-700 border border-gray-300 rounded focus:border-slate-600 text-center"
+                id="regularPrice"
+                value={regularPrice}
+                onChange={onChange}
+                min="50"
+                max="400000000"
+                required
+                className="w-full px-4 py-2 text-xl text-gray-700 bg-white border border-gray-300 rounded transition duration-150 ease-in-out focus:text-gray-700 focus:bg-white focus:border-green-700 text-center"
               />
+              {type === "rent" && (
+                <div className="">
+                  <p className="text-md w-full whitespace-nowrap">$ / Month</p>
+                </div>
+              )}
             </div>
-          )}
+          </div>
         </div>
-
-        <div className="images">
-          <p className="text-lg font-semibold mt-6 mb-2">Images</p>
-          <p className="text-gray-600 mb-2">
-            The first will be the cover (Max 6)
+        {offer && (
+          <div className="flex items-center mb-6">
+            <div className="">
+              <p className="text-lg font-semibold">Discounted price</p>
+              <div className="flex w-full justify-center items-center space-x-6">
+                <input
+                  type="number"
+                  id="discountedPrice"
+                  value={discountedPrice}
+                  onChange={onChange}
+                  min="50"
+                  max="400000000"
+                  required={offer}
+                  className="w-full px-4 py-2 text-xl text-gray-700 bg-white border border-gray-300 rounded transition duration-150 ease-in-out focus:text-gray-700 focus:bg-white focus:border-green-700 text-center"
+                />
+                {type === "rent" && (
+                  <div className="">
+                    <p className="text-md w-full whitespace-nowrap">
+                      $ / Month
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+        <div className="mb-6">
+          <p className="text-lg font-semibold">Images</p>
+          <p className="text-gray-600">
+            The first image will be the cover (max 6)
           </p>
           <input
             type="file"
-            name="images"
             id="images"
-            onChange={handleOnChange}
-            accept=".jpg, .png, .jpeg"
+            onChange={onChange}
+            accept=".jpg,.png,.jpeg"
             multiple
-            className="w-full px-3 py-2 border  border-gray-300 rounded"
+            required
+            className="w-full px-3 py-1.5 text-gray-700 bg-white border border-gray-300 rounded transition duration-150 ease-in-out focus:bg-white focus:border-green-700"
           />
         </div>
-
         <button
-          type="button"
-          className="w-full bg-green-700 hover:bg-green-800 transition duration-300 ease-in-out px-4 py-3 rounded my-6 text-white text-lg shadow-md hover:shadow-lg font-medium"
+          type="submit"
+          className="mb-6 w-full px-7 py-3 bg-green-700 text-white font-medium text-sm uppercase rounded shadow-md hover:bg-green-800 hover:shadow-lg focus:bg-green-700 focus:shadow-lg active:bg-green-800 active:shadow-lg transition duration-150 ease-in-out"
         >
           Create Listing
         </button>
