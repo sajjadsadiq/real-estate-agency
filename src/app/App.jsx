@@ -18,14 +18,16 @@ const App = () => {
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/profile" element={<PrivateRoute/>}>
+        <Route path="/profile" element={<PrivateRoute />}>
           <Route path="/profile" element={<Profile />} />
         </Route>
         <Route path="/offers" element={<Offers />} />
         <Route path="/singin" element={<SingIn />} />
         <Route path="/singup" element={<SingUp />} />
         <Route path="/forgotpassword" element={<ForgotPassword />} />
-        <Route path="/create-listing" element={<CreateListing />} />
+        <Route path="/create-listing" element={<PrivateRoute />}>
+          <Route path="/create-listing" element={<CreateListing />} />
+        </Route>
       </Routes>
       <ToastContainer
         position="bottom-center"
