@@ -2,8 +2,10 @@ import { getAuth, updateProfile } from "firebase/auth";
 import { updateDoc } from "firebase/firestore";
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
+import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import db from "../firebaseConfig";
+import { GoHome } from 'react-icons/go'
 
 const Profile = () => {
   const auth = getAuth();
@@ -35,7 +37,7 @@ const Profile = () => {
 
   async function handleSubmitProfileData() {
     try {
-      if (auth.currentUser.displayName == name) {
+      if (auth.currentUser.displayName !== name) {
         // upadate display name in firebase auth
         await updateProfile(auth.currentUser, {
           displayName: name,
@@ -59,9 +61,8 @@ const Profile = () => {
       <div className="w-full md:w-[50%] px-5 mt-5">
         <form>
           <input
-            className={`w-full px-4 mt-1 py-4 rounded text-xl border-gray-300 ${
-              profileChangeName && "bg-red-500 focus:bg-red-300"
-            }`}
+            className={`w-full px-4 mt-1 py-4 rounded text-xl border-gray-300 ${profileChangeName && "bg-red-500 focus:bg-red-300"
+              }`}
             type="text"
             name="name"
             value={name}
@@ -97,6 +98,9 @@ const Profile = () => {
             </p>
           </div>
         </form>
+        <button className="w-full bg-green-700 text-white py-4 rounded mt-6 font-mon uppercase ">
+          <Link to="/create-listing" className="flex justify-center items-center gap-2 text-lg"><GoHome className="text-2xl" /> Sell or Rent your home</Link>
+        </button>
       </div>
     </div>
   );

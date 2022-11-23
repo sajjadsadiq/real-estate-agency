@@ -4,6 +4,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Header from "../components/Shared/Header";
 import PrivateRoute from "../components/Shared/PrivateRoute";
+import CreateListing from "../pages/CreateListing";
 import ForgotPassword from "../pages/ForgotPassword";
 import Home from "../pages/Home";
 import Offers from "../pages/Offers";
@@ -24,6 +25,7 @@ const App = () => {
         <Route path="/singin" element={<SingIn />} />
         <Route path="/singup" element={<SingUp />} />
         <Route path="/forgotpassword" element={<ForgotPassword />} />
+        <Route path="/create-listing" element={<CreateListing />} />
       </Routes>
       <ToastContainer
         position="bottom-center"
